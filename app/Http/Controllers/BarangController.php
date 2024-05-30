@@ -20,7 +20,7 @@ class BarangController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'string|nullable',
             'price' => 'required|numeric',
-            'quantity' => 'required|integer',
+            'size' => 'required|string|max:255',
         ]);
 
         $barang = Barang::create($request->all());
@@ -35,7 +35,7 @@ class BarangController extends Controller
             'name' => 'string|max:255',
             'description' => 'string',
             'price' => 'numeric',
-            'quantity' => 'integer',
+            'size' => 'string|max:255',
         ]);
 
         $barang = Barang::findOrFail($id);
