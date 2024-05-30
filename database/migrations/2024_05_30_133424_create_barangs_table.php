@@ -14,9 +14,10 @@ return new class extends Migration
     Schema::create('barangs', function (Blueprint $table) {
         $table->increments('id');
         $table->string('name');
-        $table->text('description');
+        $table->text('description')->nullable();
         $table->integer('price');
         $table->string('size');
+        $table->string('image')->nullable();
         $table->timestamps();
     });
 }
