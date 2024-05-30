@@ -7,6 +7,8 @@
     "require": {
         "php": "^8.1",
         "laravel/lumen-framework": "^10.0",
+        "league/flysystem": "^3.28",
+        "league/flysystem-local": "^3.28",
         "tymon/jwt-auth": "^2.1"
     },
     "require-dev": {
