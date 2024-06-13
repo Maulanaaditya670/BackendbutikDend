@@ -44,3 +44,15 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->delete('kokos/{id}', 'KokoController@destroy');
     });
 });
+
+$router->group(['prefix' => 'api'], function () use ($router) {
+    // Read (no auth required)
+    $router->get('hijabs', 'HijabController@index');
+    
+    // Create, Update, Delete (auth required)
+    $router->group(['middleware' => 'auth:api'], function () use ($router) {
+        $router->post('hijabs', 'HijabController@store');
+        $router->put('hijabs/{id}', 'HijabController@update');
+        $router->delete('hijabs/{id}', 'HijabController@destroy');
+    });
+});
