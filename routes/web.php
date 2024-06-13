@@ -33,4 +33,14 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     });
 });
 
-
+$router->group(['prefix' => 'api'], function () use ($router) {
+    // Read (no auth required)
+    $router->get('kokos', 'KokoController@index');
+    
+    // Create, Update, Delete (auth required)
+    $router->group(['middleware' => 'auth:api'], function () use ($router) {
+        $router->post('kokos', 'KokoController@store');
+        $router->put('kokos/{id}', 'KokoController@update');
+        $router->delete('kokos/{id}', 'KokoController@destroy');
+    });
+});
