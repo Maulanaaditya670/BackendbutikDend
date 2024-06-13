@@ -1,11 +1,10 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Koko;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class KokoController extends Controller
 {
@@ -21,12 +20,22 @@ class KokoController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|string|max:255',
-            'description' => 'string',
-            'price' => 'required|integer',
+            'description' => 'string|nullable',
+            'price' => 'required|numeric',
             'size' => 'required|string|max:255',
+            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048' // Validasi gambar
         ]);
 
-        $koko = Koko::create($request->all());
+        $data = $request->all();
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = Str::random(10) . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('images', $filename);
+            $data['image'] = $path;
+        }
+
+        $koko = Koko::create($data);
 
         return response()->json($koko, 201);
     }
@@ -38,11 +47,26 @@ class KokoController extends Controller
             'name' => 'string|max:255',
             'description' => 'string|nullable',
             'price' => 'numeric',
-            'size' => 'string|max:255',
+            'size' => 'required|string|max:255',
+            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048' // Validasi gambar
         ]);
 
         $koko = Koko::findOrFail($id);
-        $koko->update($request->all());
+        $data = $request->all();
+
+        if ($request->hasFile('image')) {
+            // Hapus gambar lama jika ada
+            if ($koko->image) {
+                Storage::delete($koko->image);
+            }
+
+            $file = $request->file('image');
+            $filename = Str::random(10) . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('images', $filename);
+            $data['image'] = $path;
+        }
+
+        $koko->update($data);
 
         return response()->json($koko);
     }
@@ -50,7 +74,16 @@ class KokoController extends Controller
     // Delete barang by ID (requires auth)
     public function destroy($id)
     {
-        Koko::findOrFail($id)->delete();
+        $koko = Koko::findOrFail($id);
+        
+        // Hapus gambar jika ada
+        if ($koko->image) {
+            Storage::delete($koko->image);
+        }
+
+        $koko->delete();
+
         return response()->json(['message' => 'Barang deleted successfully']);
     }
 }
+
