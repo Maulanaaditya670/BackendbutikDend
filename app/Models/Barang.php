@@ -6,6 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 class Barang extends Model
 {
     protected $fillable = [
-        'name', 'description', 'price', 'size', 'image'
+        'name', 'kode', 'price', 'size', 'image'
     ];
 }
