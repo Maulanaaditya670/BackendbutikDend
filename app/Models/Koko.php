@@ -10,6 +10,6 @@ class Koko extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'description', 'price', 'size', 'image'
+        'name', 'kode', 'price', 'size', 'image'
     ];
 }
