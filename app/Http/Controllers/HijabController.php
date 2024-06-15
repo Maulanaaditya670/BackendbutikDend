@@ -20,7 +20,7 @@ class HijabController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|string|max:255',
-            'description' => 'string|nullable',
+            'kode' => 'required|string|max:255',
             'price' => 'required|numeric',
             'size' => 'required|string|max:255',
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048' // Validasi gambar
@@ -45,7 +45,7 @@ class HijabController extends Controller
     {
         $this->validate($request, [
             'name' => 'string|max:255',
-            'description' => 'string|nullable',
+            'description' => 'required|string|max:255',
             'price' => 'numeric',
             'size' => 'required|string|max:255',
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048' // Validasi gambar
