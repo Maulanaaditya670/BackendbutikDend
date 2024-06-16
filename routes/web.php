@@ -32,6 +32,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->delete('barangs/{id}', 'BarangController@destroy');
     });
 });
+$router->post('/api/barangs', 'BarangController@store');
 
 $router->group(['prefix' => 'api'], function () use ($router) {
     // Read (no auth required)

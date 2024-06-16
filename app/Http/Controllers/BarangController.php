@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -16,36 +17,44 @@ class BarangController extends Controller
     }
 
     // Create new barang (requires auth)
-    public function store(Request $request)
-    {
-        $this->validate($request, [
-            'name' => 'required|string|max:255',
-            'description' => 'string|nullable',
-            'price' => 'required|numeric',
-            'size' => 'required|string|max:255',
-            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048' // Validasi gambar
-        ]);
 
-        $data = $request->all();
+// app/Http/Controllers/BarangController.php
 
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $filename = Str::random(10) . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('images', $filename);
-            $data['image'] = $path;
-        }
+// app/Http/Controllers/BarangController.php
 
-        $barang = Barang::create($data);
+public function store(Request $request)
+{
+    $this->validate($request, [
+        'name' => 'required|string|max:255',
+        'kode' => 'required|string|max:255',
+        'price' => 'required|numeric',
+        'size' => 'required|string|max:255',
+        'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+    ]);
 
-        return response()->json($barang, 201);
+    $data = $request->all();
+
+    if ($request->hasFile('image')) {
+        $file = $request->file('image');
+        $filename = Str::random(10) . '.' . $file->getClientOriginalExtension();
+        $path = $file->storeAs('uploads', $filename, 'public');
+        $data['image'] = 'storage/' . $path; // Simpan URL relatif
     }
+
+    $barang = Barang::create($data);
+
+    return response()->json($barang, 201);
+}
+
+
+
 
     // Update barang by ID (requires auth)
     public function update(Request $request, $id)
     {
         $this->validate($request, [
             'name' => 'string|max:255',
-            'kode' => 'string|max:255',
+            'description' => 'string|nullable',
             'price' => 'numeric',
             'size' => 'required|string|max:255',
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048' // Validasi gambar
@@ -86,4 +95,3 @@ class BarangController extends Controller
         return response()->json(['message' => 'Barang deleted successfully']);
     }
 }
-
