@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -8,44 +9,52 @@ use Illuminate\Support\Str;
 
 class HijabController extends Controller
 {
-    // Read all barang
+    // Read all hijab
     public function index()
     {
         $hijabs = Hijab::all();
         return response()->json($hijabs);
     }
 
-    // Create new barang (requires auth)
-    public function store(Request $request)
-    {
-        $this->validate($request, [
-            'name' => 'required|string|max:255',
-            'kode' => 'required|string|max:255',
-            'price' => 'required|numeric',
-            'size' => 'required|string|max:255',
-            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048' // Validasi gambar
-        ]);
+    // Create new hijab (requires auth)
 
-        $data = $request->all();
+// app/Http/Controllers/hijabController.php
 
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $filename = Str::random(10) . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('images', $filename);
-            $data['image'] = $path;
-        }
+// app/Http/Controllers/hijabController.php
 
-        $hijab = Hijab::create($data);
+public function store(Request $request)
+{
+    $this->validate($request, [
+        'name' => 'required|string|max:255',
+        'kode' => 'required|string|max:255',
+        'price' => 'required|numeric',
+        'size' => 'required|string|max:255',
+        'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+    ]);
 
-        return response()->json($hijab, 201);
+    $data = $request->all();
+
+    if ($request->hasFile('image')) {
+        $file = $request->file('image');
+        $filename = Str::random(10) . '.' . $file->getClientOriginalExtension();
+        $path = $file->storeAs('uploads', $filename, 'public');
+        $data['image'] = 'storage/' . $path; // Simpan URL relatif
     }
 
-    // Update barang by ID (requires auth)
+    $hijab = Hijab::create($data);
+
+    return response()->json($hijab, 201);
+}
+
+
+
+
+    // Update hijab by ID (requires auth)
     public function update(Request $request, $id)
     {
         $this->validate($request, [
             'name' => 'string|max:255',
-            'description' => 'required|string|max:255',
+            'description' => 'string|nullable',
             'price' => 'numeric',
             'size' => 'required|string|max:255',
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048' // Validasi gambar
@@ -71,7 +80,7 @@ class HijabController extends Controller
         return response()->json($hijab);
     }
 
-    // Delete barang by ID (requires auth)
+    // Delete hijab by ID (requires auth)
     public function destroy($id)
     {
         $hijab = Hijab::findOrFail($id);
@@ -83,7 +92,6 @@ class HijabController extends Controller
 
         $hijab->delete();
 
-        return response()->json(['message' => 'Barang deleted successfully']);
+        return response()->json(['message' => 'hijab deleted successfully']);
     }
 }
-
