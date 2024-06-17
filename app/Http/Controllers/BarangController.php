@@ -87,7 +87,7 @@ public function store(Request $request)
         
         // Hapus gambar jika ada
         if ($barang->image) {
-            Storage::delete($barang->image);
+            Storage::delete('public/' . $barang->image); // Update to match the storage path
         }
 
         $barang->delete();

@@ -87,11 +87,11 @@ public function store(Request $request)
         
         // Hapus gambar jika ada
         if ($koko->image) {
-            Storage::delete($koko->image);
+            Storage::delete('public/' . $koko->image); // Update to match the storage path
         }
 
         $koko->delete();
 
-        return response()->json(['message' => 'koko deleted successfully']);
+        return response()->json(['message' => 'Barang deleted successfully']);
     }
 }
