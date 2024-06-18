@@ -8,7 +8,6 @@ require_once __DIR__.'/../vendor/autoload.php';
 
 date_default_timezone_set(env('APP_TIMEZONE', 'UTC'));
 
-
 /*
 |--------------------------------------------------------------------------
 | Create The Application
@@ -73,6 +72,11 @@ $app->configure('jwt');
 | route or middleware that'll be assigned to some specific routes.
 |
 */
+
+$app->middleware([
+    App\Http\Middleware\CorsMiddleware::class
+]);
+
 
 // $app->middleware([
 //     App\Http\Middleware\ExampleMiddleware::class
